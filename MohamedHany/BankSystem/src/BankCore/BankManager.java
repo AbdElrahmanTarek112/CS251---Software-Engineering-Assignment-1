@@ -6,19 +6,15 @@ import java.util.Map;
 
 public class BankManager implements Serializable {
     private static final long serialVersionUID = 1L;
-    //private static List<BankCore.User> users = new ArrayList<>();
     private Map<String, User> users = new HashMap<>();
-    //static List<BankCore.Transaction> transactions = new ArrayList<>();
      Map<String, Transaction> transactionsMap = new HashMap<>();
-    //private static List<BankCore.Card> cards = new ArrayList<>();
+
     private Map<String, Card> cardsMap = new HashMap<>();
     private Map<String, Issue> issuesMap = new HashMap<>();
     private boolean systemReady = false;
     private static BankManager bankManager;
     private BankManager(Map<String, User> users, Map<String, Transaction> transactions, Map<String, Card> cards) {
-        /*setUsers();
-        setTransactions();
-        setCards();*/
+
         this.users = users;
         this.transactionsMap = transactions;
         this.cardsMap = cards;
@@ -31,17 +27,6 @@ public class BankManager implements Serializable {
     static void initialize(Map<String, User> u, Map<String, Transaction> t, Map<String, Card> c) {
         bankManager = new BankManager(u, t, c);
     }
-
-    /*void setUsers(Map<String, BankCore.User> users) {
-        this.users = users;
-    }
-
-    void setTransactions(Map<String, BankCore.Transaction> transactions) {
-        this.transactionsMap = transactions;
-    }
-    void setCards(Map<String, BankCore.Card> cards) {
-        this.cardsMap = cards;
-    }*/
 
     boolean getSystemReady() {
         return systemReady;
@@ -84,9 +69,7 @@ public class BankManager implements Serializable {
     }
 
    boolean transfer(Card sender, String receiverCardNumber, double amount, int sPIN) {
-       /*if (!systemReady) {
-          throw new IllegalStateException("Bank Manager has not been initialized");
-       }*/
+
         if (!sender.verifyPin(sPIN)) {
             throw new IllegalArgumentException("invalid PIN");
         }
@@ -102,7 +85,7 @@ public class BankManager implements Serializable {
         recieverCard.deposit(amount);
 
         Transaction t = new Transaction(sender.getCardNumber(), receiverCardNumber, amount, Transaction.transactionType.TRANSFER);
-        //t.save();
+
        addTransacion(t);
         return true;
     }
@@ -111,10 +94,6 @@ public class BankManager implements Serializable {
         if (admin == null) {
             throw new SecurityException("Not Enough Privileges: BankCore.Admin is null");
         }
-
-        /*if (!systemReady) {
-            throw new IllegalStateException("Bank Manager has not been initialized");
-        }*/
 
         Transaction t = transactionsMap.get(transactionID);
         if (t.getType() == Transaction.transactionType.TRANSFER) {
@@ -125,28 +104,22 @@ public class BankManager implements Serializable {
            senderCard.deposit(t.getAmount());
 
            Transaction revertedTransaction = new Transaction(t.getReceiverCardNumber(), t.getSenderCardNumber(), t.getAmount(), Transaction.transactionType.REVERT);
-           //revertedTransaction.save();
             addTransacion(revertedTransaction);
 
         }
 
         if (t.getType() == Transaction.transactionType.DEPOSIT) {
             Card recieverCard = cardsMap.get(t.getReceiverCardNumber());
-
             recieverCard.withdraw(t.getAmount());
 
             Transaction revertedTransaction = new Transaction(t.getSenderCardNumber(), null, t.getAmount(), Transaction.transactionType.REVERT);
-            //revertedTransaction.save();
             addTransacion(revertedTransaction);
         }
 
         if (t.getType() == Transaction.transactionType.WITHDRAW) {
             Card recieverCard = cardsMap.get(t.getReceiverCardNumber());
-
             recieverCard.deposit(t.getAmount());
-
             Transaction revertedTransaction = new Transaction(null, t.getReceiverCardNumber(), t.getAmount(), Transaction.transactionType.REVERT);
-            //revertedTransaction.save();
             addTransacion(revertedTransaction);
         }
 
@@ -166,18 +139,16 @@ public class BankManager implements Serializable {
 
     public void addTransacion(Transaction t) {
         bankManager.transactionsMap.put(t.getTransactionID(), t);
-        //BankIO.saveTransaction(t);
         sync();
     }
 
     public void addUser(User u) {
         bankManager.users.put(u.nationalId, u);
-        //BankIO.saveUser(u);
         sync();
     }
     public void addCard(Card c) {
         bankManager.cardsMap.put(c.getCardNumber(), c);
-        //BankIO.saveCard(c);
+
         sync();
     }
 

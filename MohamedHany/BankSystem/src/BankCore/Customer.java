@@ -9,8 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Customer extends User implements Serializable {
-    //private BankCore.Account _account;
-    //private List<BankCore.Card> cards;
+
     private Map<String, Card> cardsMap;
     public Customer(String username, String email, String password, String firstName, String lastName, String nationalId, String securityQuestion, String securityAnswer, String phone, Card card) {
         super(username, password, email, firstName, lastName, phone, nationalId);
@@ -18,7 +17,6 @@ public class Customer extends User implements Serializable {
         if (card != null) {
             this.cardsMap.put(card.getCardNumber(), card);
         }
-        //_account = new BankCore.Account(firstName + lastName, email, phone, nationalId, securityQuestion, securityAnswer);
 
     }
 
@@ -27,9 +25,6 @@ public class Customer extends User implements Serializable {
             throw new SecurityException("Invalid password");
         }
 
-        /*if (!cardsMap.containsKey(cardNumber)) {
-            throw new SecurityException("Invalid card number for this customer");
-        }*/
         verifyCard(cardNumber);
 
         LocalDate issueDate = LocalDate.now();

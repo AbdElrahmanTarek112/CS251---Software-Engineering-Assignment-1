@@ -14,14 +14,6 @@ public class Transaction implements Serializable {
     Date date;
     transactionType type;
 
-    /*BankCore.Transaction(String senderCardNumber, String receiverCardNumber, double amount) {
-        type = transactionType.TRANSFER;
-        this.senderCardNumber = senderCardNumber;
-        this.receiverCardNumber = receiverCardNumber;
-        this.amount = amount;
-        LocalDate currentDate = LocalDate.now();
-        date = new Date(currentDate.getYear(), currentDate.getMonthValue(), currentDate.getDayOfMonth());
-    }*/
 
     Transaction(String senderCardNumber, String receiverCardNumber, double amount, transactionType type) {
         this.type = type;

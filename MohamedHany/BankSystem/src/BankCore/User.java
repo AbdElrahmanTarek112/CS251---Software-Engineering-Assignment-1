@@ -12,9 +12,6 @@ public class User implements Serializable {
     protected String nationalId;
 
 
-
-    //BankCore.User() {}
-
     User(String username, String password, String email, String firstName, String lastName, String phone, String nationalId) {
         this.username = username;
         this.password = validatePassword(password);
