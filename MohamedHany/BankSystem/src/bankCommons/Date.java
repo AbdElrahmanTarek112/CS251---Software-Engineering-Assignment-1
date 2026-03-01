@@ -1,6 +1,8 @@
 package bankCommons;
 
-public class Date {
+import java.io.Serializable;
+
+public class Date implements Serializable {
     private int year;
     private int month;
     private int day;
@@ -52,4 +54,13 @@ public class Date {
     public int getYear() {return this.year;}
     public int getMonth() {return this.month;}
     public int getDay() {return this.day;}
+
+    @Override
+    public String toString() {
+        return "Date{" +
+                year +
+                "-" + month +
+                "-" + day +
+                '}';
+    }
 }

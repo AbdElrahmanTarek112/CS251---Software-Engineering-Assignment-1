@@ -1,3 +1,5 @@
+package BankCore;
+
 public class Account  {
     //public String name;
     //public String email;

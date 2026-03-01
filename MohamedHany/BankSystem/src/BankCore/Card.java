@@ -1,18 +1,22 @@
-//import Date class
+package BankCore;//import Date class
 import bankCommons.Date;
+
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-public class Card {
+public class Card implements Serializable {
     private String cardNumber;
     private Date expirationDate;
     private double balance;
     private int pin;
-    public Card(String cardNumber, Date expirationDate, double balance, int pin) {
+    private String ownerId;
+    public Card(String cardNumber, Date expirationDate, double balance, int pin, String ownerId) {
         this.cardNumber = validateCardNumber(cardNumber);
         this.expirationDate = validateExpirationDate(expirationDate);
         this.balance = validateBalance(balance);
         this.pin = validatePin(pin);
+        this.ownerId = ownerId;
     }
 
     private String validateCardNumber(String cardNumber) {
@@ -67,6 +71,19 @@ public class Card {
         return balance;
     }
 
+    public String getOwnerId() { return ownerId; }
+
+    int getPin() {
+        return pin;
+    }
+
+    Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    double getBalance() {
+        return balance;
+    }
     public void withdraw(double amount, int PIN) {
         if (PIN != this.pin) {
             throw new IllegalArgumentException("Invalid PIN");
@@ -79,7 +96,8 @@ public class Card {
         }
         Transaction t = new Transaction(this.cardNumber, amount, Transaction.transactionType.WITHDRAW);
         this.balance -= amount;
-        t.save();
+        //t.save();
+        BankManager.getInstance().addTransacion(t);
     }
 
     public void deposit(double amount, int PIN) {
@@ -91,7 +109,8 @@ public class Card {
         }
         Transaction t = new Transaction(this.cardNumber, amount, Transaction.transactionType.DEPOSIT);
         this.balance += amount;
-        t.save();
+        //t.save();
+        BankManager.getInstance().addTransacion(t);
     }
 
 
@@ -114,11 +133,11 @@ public class Card {
             throw new IllegalArgumentException("Insufficient Balance");
         }
 
-        if (!BankManager.validate_card_number(otherCardNumber)) {
+        if (!BankManager.getInstance().validate_card_number(otherCardNumber)) {
             throw new IllegalArgumentException("Invalid card number");
         }
 
-        BankManager.transfer(this, otherCardNumber, amount, PIN);
+        BankManager.getInstance().transfer(this, otherCardNumber, amount, PIN);
 
     }
 
